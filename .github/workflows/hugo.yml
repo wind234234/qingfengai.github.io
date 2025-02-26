@@ -22,7 +22,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.121.0
+      HUGO_VERSION: 0.144.1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,11 +51,12 @@ jobs:
           ls -la themes/stack || echo "Theme directory not found!"
           hugo version
           echo "Base URL: ${{ steps.pages.outputs.base_url }}/"
+          HUGO_BASEURL="${{ steps.pages.outputs.base_url }}/"
+          echo "Using base URL: $HUGO_BASEURL"
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/" \
-            --debug
+            --baseURL "$HUGO_BASEURL"
           echo "Hugo build completed"
           echo "Public directory contents:"
           ls -la public/
