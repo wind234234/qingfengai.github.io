@@ -1,0 +1,183 @@
+{{ define "main" }}
+<main class="main custom-search-page">
+    <div class="search-container">
+        <h1>搜索</h1>
+        
+        <!-- 调试信息 -->
+        <div id="debug-info" style="margin: 20px 0; padding: 10px; background: #f0f0f0;">
+            <h3>调试信息</h3>
+            <p>文章总数: {{ len (where .Site.RegularPages "Type" "in" site.Params.mainSections) }}</p>
+            <p>文章列表:</p>
+            <ul>
+            {{ range (where .Site.RegularPages "Type" "in" site.Params.mainSections) }}
+                <li>{{ .Title }} ({{ .Type }})</li>
+            {{ end }}
+            </ul>
+        </div>
+
+        <div class="search-box">
+            <input 
+                id="search-input" 
+                type="text" 
+                class="search-input"
+                placeholder="输入关键词搜索... (按 Ctrl/Cmd + K 快速搜索)" 
+                aria-label="搜索"
+                autocomplete="off"
+            >
+        </div>
+        <div id="search-results" class="search-results"></div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const searchResults = document.getElementById('search-results');
+            
+            // 预加载的文章数据
+            const articles = [
+                {{ range $index, $page := (where .Site.RegularPages "Type" "in" site.Params.mainSections) }}
+                {{ if $index }},{{ end }}
+                {
+                    title: {{ .Title | jsonify }},
+                    content: {{ .Plain | jsonify }},
+                    summary: {{ .Summary | jsonify }},
+                    permalink: {{ .Permalink | jsonify }},
+                    date: {{ .Date.Format "2006-01-02" | jsonify }},
+                    tags: {{ .Params.tags | default slice | jsonify }},
+                    categories: {{ .Params.categories | default slice | jsonify }}
+                }
+                {{ end }}
+            ];
+
+            console.log('可搜索的文章数量:', articles.length);
+            console.log('文章列表:', articles);
+
+            // 从URL获取搜索关键词
+            const urlParams = new URLSearchParams(window.location.search);
+            const keywordFromUrl = urlParams.get('keyword');
+            if (keywordFromUrl) {
+                searchInput.value = keywordFromUrl;
+                performSearch();
+            }
+
+            function performSearch() {
+                const query = searchInput.value.toLowerCase().trim();
+                console.log('执行搜索，关键词:', query);
+
+                if (query.length < 1) {
+                    searchResults.innerHTML = '';
+                    return;
+                }
+
+                const results = articles.filter(item => {
+                    const titleMatch = item.title.toLowerCase().includes(query);
+                    const contentMatch = item.content.toLowerCase().includes(query);
+                    const tagsMatch = item.tags.some(tag => tag.toLowerCase().includes(query));
+                    const categoriesMatch = item.categories.some(cat => cat.toLowerCase().includes(query));
+                    
+                    return titleMatch || contentMatch || tagsMatch || categoriesMatch;
+                });
+
+                console.log('搜索结果数量:', results.length);
+
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<p class="no-results">没有找到匹配的结果</p>';
+                    return;
+                }
+
+                const resultsHtml = results.map(item => `
+                    <article class="search-result-item">
+                        <h2><a href="${item.permalink}">${item.title}</a></h2>
+                        <div class="search-result-date">${item.date}</div>
+                        <div class="search-result-summary">${item.summary}</div>
+                        ${item.tags.length > 0 ? `
+                            <div class="search-result-tags">
+                                标签: ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join(', ')}
+                            </div>
+                        ` : ''}
+                    </article>
+                `).join('');
+
+                searchResults.innerHTML = resultsHtml;
+            }
+
+            searchInput.addEventListener('input', function() {
+                setTimeout(performSearch, 300);
+            });
+
+            // 添加快捷键支持
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    searchResults.innerHTML = '';
+                    searchInput.blur();
+                }
+            });
+        });
+        </script>
+    </div>
+</main>
+
+<style>
+.custom-search-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.search-container {
+    margin: 0 auto;
+    max-width: 800px;
+}
+.search-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.search-result-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+.search-result-date {
+    color: #666;
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+.search-result-summary {
+    color: #333;
+    margin: 10px 0;
+}
+.search-result-tags {
+    margin-top: 10px;
+}
+.search-result-tags .tag {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-right: 5px;
+    font-size: 0.9em;
+}
+.no-results {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+#debug-info {
+    margin: 20px 0;
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+#debug-info ul {
+    margin: 0;
+    padding-left: 20px;
+}
+</style>
+{{ end }} 

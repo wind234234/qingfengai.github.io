@@ -1,0 +1,30 @@
+# 主题配置
+[sidebar]
+  subtitle = "探索AI的无限可能"
+
+[widgets]
+  enabled = ["archives", "tag-cloud"]
+
+[widgets.search]
+  enabled = false
+
+[footer]
+  since = 2023
+
+[article]
+  math = false
+  readingTime = true
+
+# 完全禁用搜索
+[search]
+  enable = false
+
+# 禁用所有搜索相关功能
+[params.search]
+  enable = false
+
+[params.widgets]
+  enabled = ["archives", "tag-cloud"]
+
+[params.widgets.search]
+  enabled = false 

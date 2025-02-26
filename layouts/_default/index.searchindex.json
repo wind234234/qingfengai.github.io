@@ -1,0 +1,23 @@
+{
+    "articles": [
+        {{- $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections -}}
+        {{- $notHidden := where .Site.RegularPages "Params.hidden" "!=" true -}}
+        {{- $filtered := where $notHidden "Type" "in" .Site.Params.mainSections -}}
+        {{- range $index, $element := $filtered -}}
+            {{- if $index -}}, {{- end -}}
+            {
+                "title": {{ .Title | jsonify }},
+                "date": {{ .Date.Format "2006-01-02" | jsonify }},
+                "permalink": {{ .Permalink | jsonify }},
+                "content": {{ .Plain | jsonify }},
+                "summary": {{ .Summary | jsonify }},
+                {{- with .Params.tags -}}
+                "tags": {{ . | jsonify }},
+                {{- end -}}
+                {{- with .Params.categories -}}
+                "categories": {{ . | jsonify }}
+                {{- end -}}
+            }
+        {{- end -}}
+    ]
+} 
