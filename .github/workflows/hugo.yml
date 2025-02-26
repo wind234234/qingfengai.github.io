@@ -44,10 +44,14 @@ jobs:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: |
+          hugo version
+          echo "Base URL: ${{ steps.pages.outputs.base_url }}/"
           hugo \
             --gc \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+          echo "Hugo build completed"
+          ls -la public/
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
