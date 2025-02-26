@@ -3,9 +3,6 @@ languageCode = "zh-cn"
 title = "清风AI探索"
 theme = "stack"
 
-# GitHub Pages 部署设置
-publishDir = "docs"
-
 # 启用搜索功能
 [outputs]
   home = ["HTML", "RSS", "JSON"]
