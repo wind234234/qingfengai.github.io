@@ -1,12 +1,12 @@
 ---
-title: "大语言模型的崛起与应用"
-date: 2023-11-20T14:00:00+08:00
-lastmod: 2023-11-20T14:00:00+08:00
+title: "大语言模型：AI领域的革命性突破"
+date: 2023-10-15T14:00:00+08:00
+lastmod: 2023-10-15T14:00:00+08:00
 draft: false
-description: "探讨大语言模型的发展历程、工作原理及其在各行业中的应用"
-categories: ["AI前沿"]
-tags: ["大语言模型", "GPT", "自然语言处理", "LLM"]
-image: "llm.jpg"
+description: "探索大语言模型的工作原理、应用场景和未来发展"
+categories: ["AI技术"]
+tags: ["LLM", "NLP", "GPT"]
+image: "img/llm.jpg"
 ---
 
 ## 大语言模型：AI领域的革命性突破

@@ -6,7 +6,7 @@ draft: false
 description: "人工智能基础知识的简明概述，适合初学者阅读"
 categories: ["AI基础"]
 tags: ["机器学习", "深度学习", "入门"]
-image: "ai-basics.jpg"
+image: "img/ai-basics.jpg"
 ---
 
 ## 人工智能的基本概念

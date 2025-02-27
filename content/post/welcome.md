@@ -6,7 +6,7 @@ draft: false
 description: "探索AI的无限可能，分享AI技术与应用"
 categories: ["公告"]
 tags: ["欢迎", "介绍"]
-image: "welcome.jpg"
+image: "img/welcome.jpg"
 ---
 
 ## 欢迎来到清风AI探索
